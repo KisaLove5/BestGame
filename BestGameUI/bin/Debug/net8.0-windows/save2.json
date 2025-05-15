@@ -1,0 +1,54 @@
+{
+  "Army1": [
+    {
+      "Type": "Swordsman",
+      "Hp": 12
+    },
+    {
+      "Type": "Swordsman",
+      "Hp": 12
+    },
+    {
+      "Type": "Mage",
+      "Hp": 4
+    },
+    {
+      "Type": "Swordsman",
+      "Hp": 12
+    },
+    {
+      "Type": "Swordsman",
+      "Hp": 12
+    }
+  ],
+  "Army2": [
+    {
+      "Type": "Swordsman",
+      "Hp": 12
+    },
+    {
+      "Type": "Archer",
+      "Hp": 5
+    },
+    {
+      "Type": "Archer",
+      "Hp": 5
+    },
+    {
+      "Type": "Archer",
+      "Hp": 5
+    },
+    {
+      "Type": "Archer",
+      "Hp": 5
+    },
+    {
+      "Type": "Archer",
+      "Hp": 5
+    },
+    {
+      "Type": "Archer",
+      "Hp": 5
+    }
+  ]
+}

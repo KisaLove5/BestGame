@@ -1,0 +1,26 @@
+{
+  "Army1": [
+    {
+      "Type": "Swordsman",
+      "Hp": 1
+    },
+    {
+      "Type": "Swordsman",
+      "Hp": 10
+    },
+    {
+      "Type": "Swordsman",
+      "Hp": 12
+    }
+  ],
+  "Army2": [
+    {
+      "Type": "Spearman",
+      "Hp": 8
+    },
+    {
+      "Type": "Swordsman",
+      "Hp": 12
+    }
+  ]
+}

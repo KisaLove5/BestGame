@@ -1,0 +1,81 @@
+﻿Бой начался!
+[Swordsman] Атакует врага (т.к. он фронтовой)!
+[Archer] стреляет в WallAdapter (позиция 0), нанося 4 урона.
+[WeaponBearer] Отдыхает...
+[WeaponBearer] Отдыхает...
+[WeaponBearer] Отдыхает...
+
+[Swordsman] Атакует врага (т.к. он фронтовой)!
+[Archer] стреляет в WallAdapter (позиция 0), нанося 4 урона.
+[WeaponBearer] Отдыхает...
+[WeaponBearer] Отдыхает...
+[WeaponBearer] Отдыхает...
+
+[Swordsman] Атакует врага (т.к. он фронтовой)!
+[Archer] стреляет в WallAdapter (позиция 0), нанося 4 урона.
+[WeaponBearer] Нет подходящих союзников рядом.
+[WeaponBearer] Баффует Swordsman новым баффом: PotionDecorator!
+[WeaponBearer] Баффует Swordsman новым баффом: ShieldDecorator!
+
+[Swordsman] Атакует врага (т.к. он фронтовой)!
+[Archer] стреляет в WallAdapter (позиция 0), нанося 4 урона.
+[WeaponBearer] Отдыхает...
+[WeaponBearer] Отдыхает...
+[Swordsman] Атакует врага (т.к. он фронтовой)!
+[Swordsman] Атакует врага (т.к. он фронтовой)!
+[WeaponBearer] Отдыхает...
+
+[Swordsman] Атакует врага (т.к. он фронтовой)!
+[Archer] стреляет в Swordsman (позиция 0), нанося 4 урона.
+[WeaponBearer] Отдыхает...
+[WeaponBearer] Отдыхает...
+[Swordsman] Атакует врага (т.к. он фронтовой)!
+[Swordsman] Атакует врага (т.к. он фронтовой)!
+[WeaponBearer] Отдыхает...
+
+[Swordsman] Атакует врага (т.к. он фронтовой)!
+[Archer] стреляет в Swordsman (позиция 0), нанося 4 урона.
+[WeaponBearer] Нет подходящих союзников рядом.
+[WeaponBearer] Баффует Swordsman новым баффом: HelmetDecorator!
+[WeaponBearer] Нет подходящих союзников рядом.
+
+[Swordsman] Атакует врага (т.к. он фронтовой)!
+[Archer] стреляет в WeaponBearer (позиция 0), нанося 4 урона.
+[WeaponBearer] Отдыхает...
+[WeaponBearer] Отдыхает...
+[Swordsman] Атакует врага (т.к. он фронтовой)!
+
+[Swordsman] Атакует врага (т.к. он фронтовой)!
+[Archer] стреляет в WallAdapter (позиция 0), нанося 4 урона.
+[WeaponBearer] Отдыхает...
+[WeaponBearer] Отдыхает...
+[Swordsman] Атакует врага (т.к. он фронтовой)!
+
+[Swordsman] Атакует врага (т.к. он фронтовой)!
+[Archer] стреляет в WallAdapter (позиция 0), нанося 4 урона.
+[WeaponBearer] Нет подходящих союзников рядом.
+[WeaponBearer] Баффует Swordsman новым баффом: ShieldDecorator!
+
+[Swordsman] Атакует врага (т.к. он фронтовой)!
+[Archer] стреляет в WallAdapter (позиция 0), нанося 4 урона.
+[WeaponBearer] Отдыхает...
+[WeaponBearer] Отдыхает...
+[Swordsman] Атакует врага (т.к. он фронтовой)!
+
+[Swordsman] Атакует врага (т.к. он фронтовой)!
+[Archer] стреляет в WallAdapter (позиция 0), нанося 4 урона.
+[WeaponBearer] Отдыхает...
+[WeaponBearer] Отдыхает...
+[Swordsman] Атакует врага (т.к. он фронтовой)!
+
+[Swordsman] Атакует врага (т.к. он фронтовой)!
+[Archer] стреляет в WallAdapter (позиция 0), нанося 4 урона.
+[WeaponBearer] Нет подходящих союзников рядом.
+[WeaponBearer] Баффует Swordsman новым баффом: SharpnessDecorator!
+
+[Swordsman] Атакует врага (т.к. он фронтовой)!
+[Archer] стреляет в WallAdapter (позиция 0), нанося 4 урона.
+Армия1 победила!
+
+=== Итог ===
+Армия1 победила!

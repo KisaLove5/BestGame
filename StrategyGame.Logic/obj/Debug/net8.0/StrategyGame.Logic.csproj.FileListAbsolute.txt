@@ -1,0 +1,11 @@
+C:\Users\shumi\Documents\University\Chapkin\BestGameUI\StrategyGame.Logic\obj\Debug\net8.0\StrategyGame.Logic.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\shumi\Documents\University\Chapkin\BestGameUI\StrategyGame.Logic\obj\Debug\net8.0\StrategyGame.Logic.AssemblyInfoInputs.cache
+C:\Users\shumi\Documents\University\Chapkin\BestGameUI\StrategyGame.Logic\obj\Debug\net8.0\StrategyGame.Logic.AssemblyInfo.cs
+C:\Users\shumi\Documents\University\Chapkin\BestGameUI\StrategyGame.Logic\obj\Debug\net8.0\StrategyGame.Logic.csproj.CoreCompileInputs.cache
+C:\Users\shumi\Documents\University\Chapkin\BestGameUI\StrategyGame.Logic\bin\Debug\net8.0\StrategyGame.Logic.deps.json
+C:\Users\shumi\Documents\University\Chapkin\BestGameUI\StrategyGame.Logic\bin\Debug\net8.0\StrategyGame.Logic.dll
+C:\Users\shumi\Documents\University\Chapkin\BestGameUI\StrategyGame.Logic\bin\Debug\net8.0\StrategyGame.Logic.pdb
+C:\Users\shumi\Documents\University\Chapkin\BestGameUI\StrategyGame.Logic\obj\Debug\net8.0\StrategyGame.Logic.dll
+C:\Users\shumi\Documents\University\Chapkin\BestGameUI\StrategyGame.Logic\obj\Debug\net8.0\refint\StrategyGame.Logic.dll
+C:\Users\shumi\Documents\University\Chapkin\BestGameUI\StrategyGame.Logic\obj\Debug\net8.0\StrategyGame.Logic.pdb
+C:\Users\shumi\Documents\University\Chapkin\BestGameUI\StrategyGame.Logic\obj\Debug\net8.0\ref\StrategyGame.Logic.dll
