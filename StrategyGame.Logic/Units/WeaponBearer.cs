@@ -115,5 +115,11 @@ namespace StrategyGame
 
             return false;
         }
+
+        public override void Attack(Army myArmy, Army enemyArmy)
+        {
+            // WeaponBearer не атакует напрямую
+        }
+
     }
 }

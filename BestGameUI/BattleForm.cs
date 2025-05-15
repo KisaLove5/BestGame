@@ -43,18 +43,25 @@ namespace BestGameUI
             StyleCommandButtons();
 
             // ── панель справа ---------------------------------------------------------
-            var right = new Panel { Dock = DockStyle.Right, Width = 360 };
+            var logPanel = new Panel
+            {
+                Size = new Size(380, 150),                  // Ширина и высота панели
+                Location = new Point(this.ClientSize.Width - 380, this.ClientSize.Height - 150),
+                Anchor = AnchorStyles.Right | AnchorStyles.Bottom // Прилепить к правому нижнему углу
+            };
+
             logBox = new TextBox
             {
+                Dock = DockStyle.Fill,
                 Multiline = true,
                 ReadOnly = true,
-                Dock = DockStyle.Fill,
                 ScrollBars = ScrollBars.Vertical,
-                Font = new Font("Consolas", 10f)
+                Font = new Font("Consolas", 9f)
             };
-            right.Controls.Add(logBox);
-            Controls.Add(right);          // поверх tableLayoutMain
-            right.BringToFront();
+
+            logPanel.Controls.Add(logBox);
+            Controls.Add(logPanel);
+            logPanel.BringToFront();
 
             var btnUndo = MakeMenuButton("Undo");
             btnUndo.Click += (_, __) =>

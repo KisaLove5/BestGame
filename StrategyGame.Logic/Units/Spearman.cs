@@ -32,7 +32,18 @@ namespace StrategyGame
         {
             health += amount;
         }
-            
+
+
+        public override void Attack(Army myArmy, Army enemyArmy)
+        {
+            var enemyUnits = enemyArmy.GetAllUnits();
+            int maxIndex = Math.Min(range, enemyUnits.Count);
+            for (int i = 0; i < maxIndex; i++)
+            {
+                enemyUnits[i].ReceiveDamage(AttackValue);
+            }
+        }
+
         public Unit Clone()
         {
             return new Spearman
@@ -42,7 +53,7 @@ namespace StrategyGame
                 defense = this.defense,
                 cost = this.cost,
                 range = this.range,
-                attackStrategy = this.attackStrategy
+
             };
         }
     }

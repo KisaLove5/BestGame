@@ -1,5 +1,5 @@
-﻿using System.Text;
-using StrategyGame.Interfaces;
+﻿using System;
+using System.Text;
 
 namespace StrategyGame
 {
@@ -11,7 +11,6 @@ namespace StrategyGame
         protected int defense;
         protected int cost;
         protected int range;
-        protected IAttackStrategy attackStrategy;
 
         private static int idCounter = 0;
         private readonly int unitId = idCounter++;
@@ -25,10 +24,22 @@ namespace StrategyGame
         public virtual int Cost => cost;
         public virtual int Range => range;
 
-        private string displayName;
+        protected string? displayName;
+        public virtual string DisplayName
+        {
+            get => displayName ?? GetType().Name;
+            set => displayName = value;
+        }
 
-        private static readonly Random _rnd = new();
-        private const double ChanceDecay = 0.70;  // после успеха ×0.7
+        public virtual string BaseTypeName =>
+            GetType().Name.EndsWith("Proxy") && GetType().BaseType != null
+                ? GetType().BaseType!.Name
+                : GetType().Name;
+
+        private readonly Random _rnd = new();
+
+        // --------------- Базовые штуки игрового движка (шанс на успех/промах) ----------------
+        private const double ChanceDecay = 0.93; // после успеха
         private const double ChanceReset = 1.00;  // после провала
         private double _currentChance = 1.00;
 
@@ -42,44 +53,58 @@ namespace StrategyGame
                 return true;
             }
 
-            // ПРОВАЛ
-            sb.AppendLine($"{unitTag} промахивается имея шанс {_currentChance}! Шанс сброшен.");
+            // ПРОМАХ
+            sb.AppendLine($"{unitTag} промахивается имея шанс {Math.Round(_currentChance * 100, 1)} %");
             _currentChance = ChanceReset;
             return false;
         }
 
-        public virtual string DisplayName
-        {
-            get => displayName ?? this.GetType().Name;
-            set => displayName = value;
-        }
+        // ------------------------------------------------------------------------------------
 
-        public void SetAttackStrategy(IAttackStrategy strategy)
-        {
-            attackStrategy = strategy;
-        }
-
+        /// <summary>
+        /// Стандартная атака.
+        /// </summary>
         public virtual void Attack(Army myArmy, Army enemyArmy)
         {
-            attackStrategy?.ExecuteAttack(this, myArmy, enemyArmy);
-        }
+            if (enemyArmy == null || enemyArmy.IsDefeated()) return;
 
-        public virtual void ReceiveDamage(int damage)
-        {
-            int actual = damage - defense;
-            if (actual < 0) actual = 0;
-            health -= actual;
+            var enemyUnits = enemyArmy.GetAllUnits();
+            int maxIndex = Math.Min(range, enemyUnits.Count);
+            if (maxIndex <= 0) return;
+
+            if (range <= 1)
+            {
+                // Ближний бой — фронт
+                var frontUnit = enemyArmy.GetFrontUnit();
+                frontUnit?.ReceiveDamage(AttackValue);
+            }
+            else
+            {
+                // Стреляем по случайной цели из первых <range> позиций
+                int targetIndex = _rnd.Next(0, maxIndex);
+                enemyUnits[targetIndex].ReceiveDamage(AttackValue);
+            }
         }
 
         public virtual void DoPersonalAction(Army myArmy, Army enemyArmy, StringBuilder sb)
         {
         }
 
-        protected bool IsFront(Army myArmy)
+        protected bool IsFront(Army myArmy) => myArmy.GetFrontUnit() == this;
+
+        public virtual void ReceiveDamage(int damage)
         {
-            return myArmy.GetFrontUnit() == this;
+            int actual = damage - Defense;
+            if (actual < 0) actual = 0;
+            health -= actual;
         }
 
-        public void RestoreHp(int hp) => health = Math.Min(hp, maxHealth);
+        public virtual void ReceiveHeal(int amount)
+        {
+            health += amount;
+            if (health > maxHealth) health = maxHealth;
+        }
+
+        public virtual void RestoreHp(int hp) => health = Math.Min(hp, maxHealth);
     }
 }

@@ -9,3 +9,15 @@ C:\Users\shumi\Documents\University\Chapkin\BestGameUI\StrategyGame.Logic\obj\De
 C:\Users\shumi\Documents\University\Chapkin\BestGameUI\StrategyGame.Logic\obj\Debug\net8.0\refint\StrategyGame.Logic.dll
 C:\Users\shumi\Documents\University\Chapkin\BestGameUI\StrategyGame.Logic\obj\Debug\net8.0\StrategyGame.Logic.pdb
 C:\Users\shumi\Documents\University\Chapkin\BestGameUI\StrategyGame.Logic\obj\Debug\net8.0\ref\StrategyGame.Logic.dll
+\\wsl.localhost\Ubuntu\home\scorp\University\Projecting\BestGame\StrategyGame.Logic\bin\Debug\net8.0\StrategyGame.Logic.deps.json
+\\wsl.localhost\Ubuntu\home\scorp\University\Projecting\BestGame\StrategyGame.Logic\bin\Debug\net8.0\StrategyGame.Logic.dll
+\\wsl.localhost\Ubuntu\home\scorp\University\Projecting\BestGame\StrategyGame.Logic\bin\Debug\net8.0\StrategyGame.Logic.pdb
+\\wsl.localhost\Ubuntu\home\scorp\University\Projecting\BestGame\StrategyGame.Logic\obj\Debug\net8.0\StrategyGame.Logic.GeneratedMSBuildEditorConfig.editorconfig
+\\wsl.localhost\Ubuntu\home\scorp\University\Projecting\BestGame\StrategyGame.Logic\obj\Debug\net8.0\StrategyGame.Logic.AssemblyInfoInputs.cache
+\\wsl.localhost\Ubuntu\home\scorp\University\Projecting\BestGame\StrategyGame.Logic\obj\Debug\net8.0\StrategyGame.Logic.AssemblyInfo.cs
+\\wsl.localhost\Ubuntu\home\scorp\University\Projecting\BestGame\StrategyGame.Logic\obj\Debug\net8.0\StrategyGame.Logic.csproj.CoreCompileInputs.cache
+\\wsl.localhost\Ubuntu\home\scorp\University\Projecting\BestGame\StrategyGame.Logic\obj\Debug\net8.0\StrategyGame.Logic.sourcelink.json
+\\wsl.localhost\Ubuntu\home\scorp\University\Projecting\BestGame\StrategyGame.Logic\obj\Debug\net8.0\StrategyGame.Logic.dll
+\\wsl.localhost\Ubuntu\home\scorp\University\Projecting\BestGame\StrategyGame.Logic\obj\Debug\net8.0\refint\StrategyGame.Logic.dll
+\\wsl.localhost\Ubuntu\home\scorp\University\Projecting\BestGame\StrategyGame.Logic\obj\Debug\net8.0\StrategyGame.Logic.pdb
+\\wsl.localhost\Ubuntu\home\scorp\University\Projecting\BestGame\StrategyGame.Logic\obj\Debug\net8.0\ref\StrategyGame.Logic.dll

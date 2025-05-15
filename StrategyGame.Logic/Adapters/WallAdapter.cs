@@ -28,6 +28,8 @@ namespace StrategyGame.Adapters
             this.DisplayName = "WallAdapter";
             // "health" будем перенаправлять к _wall
         }
+        
+        public override string BaseTypeName => "Wall";
 
         // Переопределим Health, чтобы читалось из Wall
         public override int Health
@@ -50,6 +52,12 @@ namespace StrategyGame.Adapters
             // Передаём урон во Wall
             // (defense=0, так что отняли как есть)
             _wall.TakeDamage(damage);
+        }
+
+        public override void RestoreHp(int hp)
+        {
+            typeof(Wall).GetProperty("Health")!
+                        .SetValue(_wall, Math.Min(hp, _initialHealth));
         }
     }
 }

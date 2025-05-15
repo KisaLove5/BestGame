@@ -16,10 +16,7 @@
       },
       "StrategyGame.Logic/1.0.0": {
         "runtime": {
-          "StrategyGame.Logic.dll": {
-            "assemblyVersion": "1.0.0",
-            "fileVersion": "1.0.0.0"
-          }
+          "StrategyGame.Logic.dll": {}
         }
       }
     }

@@ -63,7 +63,6 @@ namespace StrategyGame
                 defense = this.defense,
                 cost = this.cost,
                 range = this.range,
-                attackStrategy = this.attackStrategy
             };
         }
     }

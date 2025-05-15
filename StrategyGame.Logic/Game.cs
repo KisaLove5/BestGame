@@ -94,10 +94,10 @@ namespace StrategyGame
             return new SaveGameData
             {
                 Army1 = Army1.GetAllUnits()
-                             .Select(u => new UnitData { Type = u.GetType().Name, Hp = u.Health })
+                             .Select(u => new UnitData { Type = u.BaseTypeName, Hp = u.Health })
                              .ToList(),
                 Army2 = Army2.GetAllUnits()
-                             .Select(u => new UnitData { Type = u.GetType().Name, Hp = u.Health })
+                             .Select(u => new UnitData { Type = u.BaseTypeName, Hp = u.Health })
                              .ToList()
             };
         }

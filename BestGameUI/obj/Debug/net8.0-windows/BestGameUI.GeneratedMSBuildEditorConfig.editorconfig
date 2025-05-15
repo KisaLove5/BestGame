@@ -14,6 +14,6 @@ build_property.PlatformNeutralAssembly =
 build_property.EnforceExtendedAnalyzerRules = 
 build_property._SupportedPlatformList = Linux,macOS,Windows
 build_property.RootNamespace = BestGameUI
-build_property.ProjectDir = C:\Users\shumi\Documents\University\Chapkin\BestGameUI\BestGameUI\
+build_property.ProjectDir = \\wsl.localhost\Ubuntu\home\scorp\University\Projecting\BestGame\BestGameUI\
 build_property.EnableComHosting = 
 build_property.EnableGeneratedComInterfaceComImportInterop = 
