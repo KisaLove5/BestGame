@@ -206,7 +206,7 @@ namespace BestGameUI
         private FlowLayoutPanel CreateLineFlow(
         IEnumerable<Unit> units,
         bool flipImage,
-        Dictionary<Guid, Panel> dict)
+        Dictionary<int, Panel> dict)
         {
             var line = new FlowLayoutPanel
             {

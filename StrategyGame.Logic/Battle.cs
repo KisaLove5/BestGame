@@ -24,22 +24,45 @@ namespace StrategyGame
 
         public string DoOneTurn()
         {
-            if (IsBattleOver)
-                return "Бой уже завершён.\r\n";
+            if (IsBattleOver) return "Бой уже завершён.\r\n";
 
             var sb = new StringBuilder();
 
-            // Ход первой армии
-            ProcessArmyTurn(army1, army2, sb);
-            if (CheckEnd(sb))
-                return sb.ToString();
+            var lines1 = army1.GetLines();
+            var lines2 = army2.GetLines();
+            int maxLines = Math.Max(lines1.Count, lines2.Count);
 
-            // Ход второй армии
-            ProcessArmyTurn(army2, army1, sb);
-            if (CheckEnd(sb))
-                return sb.ToString();
+            // ―― проходимся по всем строкам обеих армий ――
+            for (int line = 0; line < maxLines; line++)
+            {
+                var l1 = (line < lines1.Count) ? lines1[line] : Array.Empty<Unit>();
+                var l2 = (line < lines2.Count) ? lines2[line] : Array.Empty<Unit>();
 
-            // Если битва ещё не закончилась — возвращаем ход
+                int slots = Math.Max(l1.Count, l2.Count);
+
+                // ―― бьёмся парами: кот-слева ↔ кот-справа ――
+                for (int i = 0; i < slots; i++)
+                {
+                    Unit u1 = (i < l1.Count) ? l1[i] : null;
+                    Unit u2 = (i < l2.Count) ? l2[i] : null;
+
+                    // левый атакует
+                    u1?.DoPersonalAction(army1, army2, sb);
+
+                    // правый атакует (даже если только что получил урон)
+                    u2?.DoPersonalAction(army2, army1, sb);
+
+                    // чистим мёртвых — но **после** обоих ударов
+                    army1.RemoveDeadUnits();
+                    army2.RemoveDeadUnits();
+                    if (army1.IsDefeated() || army2.IsDefeated())
+                    {
+                        IsBattleOver = true;
+                        sb.AppendLine(GetFinalResult());
+                        return sb.ToString();
+                    }
+                }
+            }
             return sb.ToString();
         }
 
