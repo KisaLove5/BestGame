@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("StrategyGame.Logic")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+66b9212908e32ca501408399d05b82256e74b495")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+7a33806a3686e23d9dabe8389d463457eeaccaf3")]
 [assembly: System.Reflection.AssemblyProductAttribute("StrategyGame.Logic")]
 [assembly: System.Reflection.AssemblyTitleAttribute("StrategyGame.Logic")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

@@ -6,6 +6,20 @@ namespace StrategyGame
     {
         private List<Unit> units = new List<Unit>();
 
+        // ---------- стратегия построения ----------
+        private StrategyGame.Formations.IFormationStrategy formation =
+            new StrategyGame.Formations.LineFormation();
+
+        public StrategyGame.Formations.IFormationStrategy Formation => formation;
+
+        public void SetFormation(StrategyGame.Formations.IFormationStrategy newFormation)
+        {
+            formation = newFormation ?? throw new System.ArgumentNullException(nameof(newFormation));
+        }
+
+        public System.Collections.Generic.IReadOnlyList<System.Collections.Generic.IReadOnlyList<Unit>> GetLines()
+            => formation.Arrange(units);
+
         public void AddUnit(Unit unit)
         {
             units.Add(unit);

@@ -1,4 +1,7 @@
-﻿using System.Text;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
 using StrategyGame.Interfaces;
 
 namespace StrategyGame
@@ -19,11 +22,6 @@ namespace StrategyGame
             IsBattleOver = false;
         }
 
-        /// <summary>
-        /// За один ход перебираем ВСЕ юниты армии1, потом ВСЕ юниты армии2.
-        /// Но если юнит реализует IsFrontman (мечник/копейщик)
-        /// и при этом не стоит спереди — он пропускает ход.
-        /// </summary>
         public string DoOneTurn()
         {
             if (IsBattleOver)
@@ -31,69 +29,17 @@ namespace StrategyGame
 
             var sb = new StringBuilder();
 
-            // 1) Ход армии1
-            var list1 = new List<Unit>(army1.GetAllUnits());
-            foreach (var unit in list1)
-            {
-                if (!army1.GetAllUnits().Contains(unit))
-                    continue; // на случай, если уже умер
+            // Ход первой армии
+            ProcessArmyTurn(army1, army2, sb);
+            if (CheckEnd(sb))
+                return sb.ToString();
 
-                if (unit is IsFrontman)
-                {
-                    // Это мечник или копейщик, проверяем фронт
-                    if (army1.GetFrontUnit() == unit)
-                    {
-                        unit.DoPersonalAction(army1, army2, sb);
-                    }
-                }
-                else
-                {
-                    // (Archer, Mage, Healer) — ходят всегда
-                    unit.DoPersonalAction(army1, army2, sb);
-                }
+            // Ход второй армии
+            ProcessArmyTurn(army2, army1, sb);
+            if (CheckEnd(sb))
+                return sb.ToString();
 
-                // Чистим мёртвых
-                army1.RemoveDeadUnits();
-                army2.RemoveDeadUnits();
-
-                if (army1.IsDefeated() || army2.IsDefeated())
-                {
-                    IsBattleOver = true;
-                    sb.AppendLine(GetFinalResult());
-                    return sb.ToString();
-                }
-            }
-
-            // 2) Ход армии2
-            var list2 = new List<Unit>(army2.GetAllUnits());
-            foreach (var unit in list2)
-            {
-                if (!army2.GetAllUnits().Contains(unit))
-                    continue;
-
-                if (unit is IsFrontman)
-                {
-                    if (army2.GetFrontUnit() == unit)
-                    {
-                        unit.DoPersonalAction(army2, army1, sb);
-                    }
-                }
-                else
-                {
-                    unit.DoPersonalAction(army2, army1, sb);
-                }
-
-                army1.RemoveDeadUnits();
-                army2.RemoveDeadUnits();
-
-                if (army1.IsDefeated() || army2.IsDefeated())
-                {
-                    IsBattleOver = true;
-                    sb.AppendLine(GetFinalResult());
-                    return sb.ToString();
-                }
-            }
-
+            // Если битва ещё не закончилась — возвращаем ход
             return sb.ToString();
         }
 
@@ -127,6 +73,50 @@ namespace StrategyGame
             }
             sb.AppendLine("------------------------");
             return sb.ToString();
+        }
+
+        private void ProcessArmyTurn(Army active, Army enemy, StringBuilder sb)
+        {
+            var actLines = active.GetLines();
+            var enLines = enemy.GetLines();
+
+            int max = Math.Max(actLines.Count, enLines.Count);
+            for (int line = 0; line < max; line++)
+            {
+                var own = line < actLines.Count ? actLines[line] : Array.Empty<Unit>();
+                var foe = line < enLines.Count ? enLines[line] : Array.Empty<Unit>();
+
+                // Берём «снимок» текущей линии, чтобы безопасно итерировать
+                var snapshot = new List<Unit>(own);
+                foreach (var unit in snapshot)
+                {
+                    // Если юнит уже мёртв или убран — пропускаем
+                    if (!active.GetAllUnits().Contains(unit))
+                        continue;
+
+                    bool isFront = own.Count > 0 && own[0] == unit;
+                    if (unit is IsFrontman && !isFront)
+                        continue;
+
+                    unit.DoPersonalAction(active, enemy, sb);
+                    active.RemoveDeadUnits();
+                    enemy.RemoveDeadUnits();
+
+                    if (active.IsDefeated() || enemy.IsDefeated())
+                        return;
+                }
+            }
+        }
+
+        private bool CheckEnd(StringBuilder sb)
+        {
+            if (army1.IsDefeated() || army2.IsDefeated())
+            {
+                IsBattleOver = true;
+                sb.AppendLine(GetFinalResult());
+                return true;
+            }
+            return false;
         }
     }
 }

@@ -172,7 +172,6 @@
             // 
             flowArmy1.Anchor = AnchorStyles.None;
             flowArmy1.AutoSize = true;
-            flowArmy1.FlowDirection = FlowDirection.RightToLeft;
             flowArmy1.Location = new Point(147, 365);
             flowArmy1.Margin = new Padding(4, 5, 4, 5);
             flowArmy1.Name = "flowArmy1";

@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Windows.Forms;
 using StrategyGame;
+using StrategyGame.Formations;
 using StrategyGame.GameCommands;
 
 namespace BestGameUI
@@ -31,23 +32,33 @@ namespace BestGameUI
         private Dictionary<Panel, int> wiggleBaseLeft = new();
         private readonly TurnInvoker invoker = new();
         private TextBox logBox;
+        private Button btnLine;
+        private Button btnThreeLine;
+        private Button btnWall;
         // ───────────────────────────────────────────────────────────────────────────
 
         public BattleForm(Army a1, Army a2)
         {
             InitializeComponent();
+
+            // ***--- ДОБАВЛЕНО: делаем вертикальный стек строк армии ***
+            flowArmy1.FlowDirection = FlowDirection.TopDown;
+            flowArmy2.FlowDirection = FlowDirection.TopDown;
+            flowArmy1.WrapContents = true;
+            flowArmy2.WrapContents = true;
+
             tableLayoutMain.ColumnCount = 1;
             tableLayoutMain.ColumnStyles.Clear();
             tableLayoutMain.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
 
             StyleCommandButtons();
 
-            // ── панель справа ---------------------------------------------------------
+            // ── панель справа -----------------------------------------------------
             var logPanel = new Panel
             {
-                Size = new Size(380, 150),                  // Ширина и высота панели
+                Size = new Size(380, 150),
                 Location = new Point(this.ClientSize.Width - 380, this.ClientSize.Height - 150),
-                Anchor = AnchorStyles.Right | AnchorStyles.Bottom // Прилепить к правому нижнему углу
+                Anchor = AnchorStyles.Right | AnchorStyles.Bottom
             };
 
             logBox = new TextBox
@@ -74,7 +85,7 @@ namespace BestGameUI
             btnRedo.Click += (_, __) =>
             {
                 var log = invoker.Redo(game);
-                if (!string.IsNullOrEmpty(log))  // метод ниже
+                if (!string.IsNullOrEmpty(log))
                     logBox.AppendText(log + Environment.NewLine);
 
                 InitializeUnitPanels();
@@ -83,13 +94,44 @@ namespace BestGameUI
             panelCommands.Controls.Add(btnUndo);
             panelCommands.Controls.Add(btnRedo);
 
-            // 1) tableLayoutArmies: оставляем всего ДВЕ строки
+            // Кнопки смены построения
+            btnLine = MakeMenuButton("Линия");
+            btnThreeLine = MakeMenuButton("3 линии");
+            btnWall = MakeMenuButton("Стенка");
+
+            btnLine.Click += (_, __) =>
+            {
+                var f = new LineFormation();
+                army1.SetFormation(f);
+                army2.SetFormation(f);      // ★ обе армии
+                InitializeUnitPanels();
+            };
+
+            btnThreeLine.Click += (_, __) =>
+            {
+                var f = new ThreeLineFormation();
+                army1.SetFormation(f);
+                army2.SetFormation(f);      // ★
+                InitializeUnitPanels();
+            };
+
+            btnWall.Click += (_, __) =>
+            {
+                var f = new ColumnWallFormation();
+                army1.SetFormation(f);
+                army2.SetFormation(f);      // ★
+                InitializeUnitPanels();
+            };
+
+            panelCommands.Controls.Add(btnLine);
+            panelCommands.Controls.Add(btnThreeLine);
+            panelCommands.Controls.Add(btnWall);
+
+            // Настройка таблицы армий
             tableLayoutArmies.RowStyles.Clear();
             tableLayoutArmies.RowCount = 2;
-
             tableLayoutArmies.RowStyles.Add(new RowStyle(SizeType.AutoSize));
             tableLayoutArmies.RowStyles.Add(new RowStyle(SizeType.Percent, 100f));
-
             tableLayoutArmies.SetRow(panelCommands, 0);
             tableLayoutArmies.SetRow(tableInner, 1);
 
@@ -106,10 +148,8 @@ namespace BestGameUI
             this.Load += BattleForm_Load;
             this.KeyPreview = true;
 
-
             army1 = a1;
             army2 = a2;
-
             game = new Game();
             game.SetupBattle(army1, army2);
 
@@ -163,6 +203,37 @@ namespace BestGameUI
                 b.MouseLeave += (_, __) => b.BackColor = Color.FromArgb(70, 70, 70);
             }
         }
+        private FlowLayoutPanel CreateLineFlow(
+        IEnumerable<Unit> units,
+        bool flipImage,
+        Dictionary<Guid, Panel> dict)
+        {
+            var line = new FlowLayoutPanel
+            {
+                AutoSize = true,
+                WrapContents = false,
+                Margin = new Padding(0, 2, 0, 2),
+                FlowDirection = flipImage ? FlowDirection.RightToLeft
+                                          : FlowDirection.LeftToRight
+            };
+
+            if (!units.Any())
+            {
+                // Пустышка для выравнивания
+                line.Height = UnitPanelHeight;
+                line.Width = 1;
+                line.Visible = false;
+                return line;
+            }
+
+            foreach (var u in units)
+            {
+                var p = CreateUnitPanel(u, flipImage);
+                dict[u.UnitId] = p;
+                line.Controls.Add(p);
+            }
+            return line;
+        }
 
         private void BattleForm_Load(object sender, EventArgs e)
         {
@@ -195,6 +266,35 @@ namespace BestGameUI
                 c.BackColor = Color.Transparent;
         }
 
+        private void RenderArmy(
+            FlowLayoutPanel host,
+            IReadOnlyList<IReadOnlyList<Unit>> lines,
+            Dictionary<int, Panel> dict,
+            bool flipImage)
+        {
+            foreach (var lineUnits in lines)
+            {
+                var lineFlow = new FlowLayoutPanel
+                {
+                    AutoSize = true,
+                    WrapContents = false,
+                    Margin = new Padding(0, 2, 0, 2),
+                    FlowDirection = flipImage
+                        ? FlowDirection.RightToLeft
+                        : FlowDirection.LeftToRight
+                };
+
+                foreach (var unit in lineUnits)
+                {
+                    var panel = CreateUnitPanel(unit, flipImage);
+                    dict[unit.UnitId] = panel;
+                    lineFlow.Controls.Add(panel);
+                }
+
+                host.Controls.Add(lineFlow);
+            }
+        }
+
         private void SyncArmies()
         {
             army1 = game.Army1;
@@ -204,27 +304,28 @@ namespace BestGameUI
         private void InitializeUnitPanels()
         {
             SyncArmies();
+
             flowArmy1.SuspendLayout();
             flowArmy2.SuspendLayout();
 
             flowArmy1.Controls.Clear();
             flowArmy2.Controls.Clear();
-
             unitPanelsArmy1.Clear();
             unitPanelsArmy2.Clear();
 
-            foreach (var unit in army1.GetAllUnits())
-            {
-                var panel = CreateUnitPanel(unit, flipImage: true);
-                unitPanelsArmy1[unit.UnitId] = panel;
-                flowArmy1.Controls.Add(panel);
-            }
+            var lines1 = army1.GetLines();
+            var lines2 = army2.GetLines();
+            int max = Math.Max(lines1.Count, lines2.Count);
 
-            foreach (var unit in army2.GetAllUnits())
+            for (int i = 0; i < max; i++)
             {
-                var panel = CreateUnitPanel(unit, flipImage: false);
-                unitPanelsArmy2[unit.UnitId] = panel;
-                flowArmy2.Controls.Add(panel);
+                var l1 = (i < lines1.Count) ? lines1[i] : Array.Empty<Unit>();
+                var l2 = (i < lines2.Count) ? lines2[i] : Array.Empty<Unit>();
+
+                flowArmy1.Controls.Add(
+                    CreateLineFlow(l1, flipImage: true, unitPanelsArmy1));
+                flowArmy2.Controls.Add(
+                    CreateLineFlow(l2, flipImage: false, unitPanelsArmy2));
             }
 
             flowArmy1.ResumeLayout();

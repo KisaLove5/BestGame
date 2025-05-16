@@ -1,0 +1,171 @@
+diff --git a/StrategyGame/Formations/IFormationStrategy.cs b/StrategyGame/Formations/IFormationStrategy.cs
+new file mode 100644
+--- /dev/null
++++ b/StrategyGame/Formations/IFormationStrategy.cs
+@@
++using System.Collections.Generic;
++
++namespace StrategyGame.Formations
++{
++    public interface IFormationStrategy
++    {
++        IReadOnlyList<IReadOnlyList<Unit>> Arrange(IReadOnlyList<Unit> units);
++        string Name { get; }
++    }
++}
++
+diff --git a/StrategyGame/Formations/LineFormation.cs b/StrategyGame/Formations/LineFormation.cs
+new file mode 100644
+--- /dev/null
++++ b/StrategyGame/Formations/LineFormation.cs
+@@
++using System.Collections.Generic;
++using System.Linq;
++
++namespace StrategyGame.Formations
++{
++    public class LineFormation : IFormationStrategy
++    {
++        public string Name => "Линия";
++
++        public IReadOnlyList<IReadOnlyList<Unit>> Arrange(IReadOnlyList<Unit> units)
++        {
++            return new List<IReadOnlyList<Unit>> { units.ToList() };
++        }
++    }
++}
++
+diff --git a/StrategyGame/Formations/ThreeLineFormation.cs b/StrategyGame/Formations/ThreeLineFormation.cs
+new file mode 100644
+--- /dev/null
++++ b/StrategyGame/Formations/ThreeLineFormation.cs
+@@
++using System.Collections.Generic;
++
++namespace StrategyGame.Formations
++{
++    public class ThreeLineFormation : IFormationStrategy
++    {
++        public string Name => "3 линии";
++
++        public IReadOnlyList<IReadOnlyList<Unit>> Arrange(IReadOnlyList<Unit> units)
++        {
++            var l1 = new List<Unit>();
++            var l2 = new List<Unit>();
++            var l3 = new List<Unit>();
++            for (int i = 0; i < units.Count; i++)
++            {
++                int m = i % 3;
++                if (m == 0) l1.Add(units[i]);
++                else if (m == 1) l2.Add(units[i]);
++                else l3.Add(units[i]);
++            }
++            return new List<IReadOnlyList<Unit>> { l1, l2, l3 };
++        }
++    }
++}
++
+diff --git a/StrategyGame/Formations/ColumnWallFormation.cs b/StrategyGame/Formations/ColumnWallFormation.cs
+new file mode 100644
+--- /dev/null
++++ b/StrategyGame/Formations/ColumnWallFormation.cs
+@@
++using System.Collections.Generic;
++
++namespace StrategyGame.Formations
++{
++    public class ColumnWallFormation : IFormationStrategy
++    {
++        public string Name => "Стенка";
++
++        public IReadOnlyList<IReadOnlyList<Unit>> Arrange(IReadOnlyList<Unit> units)
++        {
++            var lines = new List<IReadOnlyList<Unit>>();
++            foreach (var u in units)
++                lines.Add(new List<Unit> { u });
++            return lines;
++        }
++    }
++}
++
+diff --git a/StrategyGame/Army.cs b/StrategyGame/Army.cs
+@@
+-        private List<Unit> units = new List<Unit>();
++        private List<Unit> units = new List<Unit>();
++
++        // ---------- стратегия построения ----------
++        private StrategyGame.Formations.IFormationStrategy formation =
++            new StrategyGame.Formations.LineFormation();
++
++        public StrategyGame.Formations.IFormationStrategy Formation => formation;
++
++        public void SetFormation(StrategyGame.Formations.IFormationStrategy newFormation)
++        {
++            formation = newFormation ?? throw new System.ArgumentNullException(nameof(newFormation));
++        }
++
++        public System.Collections.Generic.IReadOnlyList<System.Collections.Generic.IReadOnlyList<Unit>> GetLines()
++            => formation.Arrange(units);
+@@
+ 
+     }
+ }
++
+diff --git a/StrategyGame/Battle.cs b/StrategyGame/Battle.cs
+@@
+-            // 1) Ход армии1
+-            var list1 = new List<Unit>(army1.GetAllUnits());
+-            foreach (var unit in list1)
+-            {
+-                ...
+-            }
+-            // 2) Ход армии2
+-            var list2 = new List<Unit>(army2.GetAllUnits());
+-            foreach (var unit in list2)
+-            {
+-                ...
+-            }
++            ProcessArmyTurn(army1, army2, sb);
++            if (CheckEnd(sb)) return sb.ToString();
++            ProcessArmyTurn(army2, army1, sb);
++            CheckEnd(sb);
+@@
++        private void ProcessArmyTurn(Army active, Army enemy, StringBuilder sb)
++        {
++            var actLines = active.GetLines();
++            var enLines = enemy.GetLines();
++
++            int max = System.Math.Max(actLines.Count, enLines.Count);
++            for (int line = 0; line < max; line++)
++            {
++                var own = line < actLines.Count ? actLines[line] : System.Array.Empty<Unit>();
++                var foe = line < enLines.Count ? enLines[line] : System.Array.Empty<Unit>();
++
++                var snapshot = new List<Unit>(own);
++                foreach (var unit in snapshot)
++                {
++                    if (!active.GetAllUnits().Contains(unit)) continue;
++
++                    bool isFront = own.Count > 0 && own[0] == unit;
++                    if (unit is StrategyGame.Interfaces.IsFrontman && !isFront)
++                        continue;
++
++                    unit.DoPersonalAction(active, enemy, sb);
++                    active.RemoveDeadUnits();
++                    enemy.RemoveDeadUnits();
++                    if (active.IsDefeated() || enemy.IsDefeated()) return;
++                }
++            }
++        }
++
++        private bool CheckEnd(StringBuilder sb)
++        {
++            if (army1.IsDefeated() || army2.IsDefeated())
++            {
++                IsBattleOver = true;
++                sb.AppendLine(GetFinalResult());
++                return true;
++            }
++            return false;
++        }
++
