@@ -6,16 +6,16 @@
 
         public PotionDecorator(Unit unit) : base(unit) { }
 
-        public override int AttackValue => unit.AttackValue + 2;
+        public override int AttackValue => Inner.AttackValue + 2;
 
         public override Unit Tick()
         {
-            unit = unit is UnitDecorator decorator ? decorator.Tick() : unit;
+            Inner = Inner is UnitDecorator decorator ? decorator.Tick() : Inner;
 
             duration--;
             if (duration <= 0)
             {
-                return unit; // снимаем декоратор
+                return Inner; // снимаем декоратор
             }
 
             return this;

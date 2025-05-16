@@ -11,17 +11,19 @@ namespace BestGameUI
         private string playerName;
         private int money;
         private Army army;
-        private UnitFactory factory;
+        private readonly IArmyFactory factory;
 
         public Army ResultArmy => army;
 
-        public ArmyBuildForm(string playerName, int startMoney)
+        public ArmyBuildForm(string playerName,
+                     int startMoney,
+                     IArmyFactory armyFactory)
         {
             InitializeComponent(); // создаёт tableLayoutPanel, leftPanel, flowArmy
             this.playerName = playerName;
             this.money = startMoney;
             this.army = new Army();
-            this.factory = new UnitFactory();
+            this.factory = armyFactory;
 
             labelInfo.Text = $"Сбор армии для {playerName}";
             labelMoney.Text = $"Монет: {money}";

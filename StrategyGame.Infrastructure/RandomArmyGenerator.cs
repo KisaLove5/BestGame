@@ -8,9 +8,7 @@ namespace StrategyGame
     {
         private static readonly Random rnd = new();
 
-        /// <param name="budget">Сколько «монет» можно потратить.</param>
-        /// <param name="factory">Общий UnitFactory — учтёт включённые прокси-логеры.</param>
-        public static Army Generate(int budget, UnitFactory factory)
+        public static Army Generate(int budget, IArmyFactory factory, IRandomService rnd)
         {
             // Список (тип, cost) — если добавите новых юнитов, просто расширьте.
             var catalog = new (string type, int cost)[]

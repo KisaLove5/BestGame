@@ -6,7 +6,7 @@
 
         public HelmetDecorator(Unit unit) : base(unit) { }
 
-        public override int Defense => unit.Defense + (armorHp > 0 ? 1 : 0);
+        public override int Defense => Inner.Defense + (armorHp > 0 ? 1 : 0);
 
         public override void ReceiveDamage(int damage)
         {
@@ -17,17 +17,17 @@
             }
             else
             {
-                unit.ReceiveDamage(damage);
+                Inner.ReceiveDamage(damage);
             }
         }
 
         public override Unit Tick()
         {
-            unit = unit is UnitDecorator decorator ? decorator.Tick() : unit;
+            Inner = Inner is UnitDecorator decorator ? decorator.Tick() : Inner;
 
             if (armorHp <= 0)
             {
-                return unit; // снимаем декоратор
+                return Inner; // снимаем декоратор
             }
 
             return this;

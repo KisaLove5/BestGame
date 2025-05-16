@@ -1,4 +1,5 @@
-﻿using System;
+﻿using StrategyGame.Abstractions;
+using System;
 using System.Text;
 
 namespace StrategyGame
@@ -11,6 +12,10 @@ namespace StrategyGame
         protected int defense;
         protected int cost;
         protected int range;
+
+        protected readonly IRandomService Rnd;
+        protected Unit(IRandomService rnd)
+        => Rnd = rnd;
 
         private static int idCounter = 0;
         private readonly int unitId = idCounter++;
@@ -39,24 +44,17 @@ namespace StrategyGame
         private readonly Random _rnd = new();
 
         // --------------- Базовые штуки игрового движка (шанс на успех/промах) ----------------
-        private const double ChanceDecay = 0.7; // после успеха
-        private const double ChanceReset = 1.00;  // после провала
-        private double _currentChance = 1.00;
+        private const double Decay = 0.7; // после успеха
+        private const double Reset = 1.00;  // после провала
+        private double _chance = 1.00;
 
-        protected bool TryPerform(StringBuilder sb, string unitTag, Action doAction)
+        protected bool TryPerform(StringBuilder sb, string tag, Action succeed)
         {
-            if (_rnd.NextDouble() <= _currentChance)
-            {
-                // УСПЕХ
-                doAction();
-                _currentChance = Math.Max(0.05, _currentChance * ChanceDecay);
-                return true;
-            }
+            if (Rnd.NextDouble() <= _chance)
+            { succeed(); _chance = Math.Max(0.05, _chance * Decay); return true; }
 
-            // ПРОМАХ
-            sb.AppendLine($"{unitTag} промахивается имея шанс {Math.Round(_currentChance * 100, 1)} %");
-            _currentChance = ChanceReset;
-            return false;
+            sb.AppendLine($"{tag} промахивается при {Math.Round(_chance * 100, 1)} %");
+            _chance = Reset; return false;
         }
 
         // ------------------------------------------------------------------------------------
