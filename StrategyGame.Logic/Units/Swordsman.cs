@@ -18,6 +18,7 @@ namespace StrategyGame
 
         public override void DoPersonalAction(Army myArmy, Army enemyArmy, StringBuilder sb)
         {
+            if (Health <= 0) return;   // мёртвый — ничего не делает
             if (!TryPerform(sb, "[Swordsman]", () =>
             {
                 sb.AppendLine("[Swordsman] Атакует врага (т.к. фронтовой)!");

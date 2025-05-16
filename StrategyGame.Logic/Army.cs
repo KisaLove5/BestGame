@@ -32,8 +32,10 @@ namespace StrategyGame
 
         public Unit GetFrontUnit()
         {
-            if (units.Count == 0) return null;
-            return units[0];
+            // нужен первый ЖИВОЙ юнит, а не просто первый в списке
+            foreach (var u in units)
+                   if (u.Health > 0) return u;
+            return null;
         }
 
         public bool IsDefeated()

@@ -19,6 +19,7 @@ namespace StrategyGame
 
         public override void DoPersonalAction(Army myArmy, Army enemyArmy, StringBuilder sb)
         {
+            if (Health <= 0) return;   // мёртвый — ничего не делает
             if (!TryPerform(sb, "[Archer]", () =>
             {
                 int myIndex = myArmy.GetAllUnits().IndexOf(this);

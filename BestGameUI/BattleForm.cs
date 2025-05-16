@@ -408,11 +408,17 @@ namespace BestGameUI
                     continue;
                 }
 
-                foreach (Control control in panel.Controls)
+                foreach (var control in panel.Controls)
                 {
-                    if (control is ProgressBar hpBar)
+                    switch (control)
                     {
-                        AnimateProgressBar(hpBar, aliveUnit.Health);
+                        case ProgressBar hpBar:
+                            AnimateProgressBar(hpBar, aliveUnit.Health);
+                            break;
+
+                        case Label lbl when lbl.Name == "lblHp":
+                            lbl.Text = $"{aliveUnit.Health}/{aliveUnit.MaxHealth}";
+                            break;
                     }
                 }
             }
@@ -482,7 +488,21 @@ namespace BestGameUI
                 Height = 20,
                 Minimum = 0,
                 Maximum = (unit.MaxHealth > 0) ? unit.MaxHealth : 1,
-                Value = Math.Max(0, Math.Min(unit.Health, unit.MaxHealth))
+                Value = Math.Max(0, Math.Min(unit.Health, unit.MaxHealth)),
+                Tag = "hpBar"
+            };
+
+            // ---------- ЧИСЛОВОЙ ЛЕЙБЛ HP -------------
+            Label hpLabel = new Label
+            {
+                Name = "lblHp",
+                Dock = DockStyle.Bottom,
+                Height = 16,
+                TextAlign = ContentAlignment.MiddleCenter,
+                Font = new Font("Segoe UI", 8f, FontStyle.Bold),
+                ForeColor = Color.White,
+                BackColor = Color.Transparent,
+                Text = $"{unit.Health}/{unit.MaxHealth}"
             };
 
             container.Controls.Add(imagePanel);

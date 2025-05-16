@@ -46,15 +46,12 @@ namespace StrategyGame
                     Unit u1 = (i < l1.Count) ? l1[i] : null;
                     Unit u2 = (i < l2.Count) ? l2[i] : null;
 
-                    // левый атакует
-                    u1?.DoPersonalAction(army1, army2, sb);
+                    if (u1 != null && u1.Health > 0)
+                        u1.DoPersonalAction(army1, army2, sb);
+                    
+                    if (u2 != null && u2.Health > 0)
+                        u2.DoPersonalAction(army2, army1, sb);                 
 
-                    // правый атакует (даже если только что получил урон)
-                    u2?.DoPersonalAction(army2, army1, sb);
-
-                    // чистим мёртвых — но **после** обоих ударов
-                    army1.RemoveDeadUnits();
-                    army2.RemoveDeadUnits();
                     if (army1.IsDefeated() || army2.IsDefeated())
                     {
                         IsBattleOver = true;
@@ -62,6 +59,8 @@ namespace StrategyGame
                         return sb.ToString();
                     }
                 }
+                army1.RemoveDeadUnits();
+                army2.RemoveDeadUnits();
             }
             return sb.ToString();
         }

@@ -24,6 +24,7 @@ namespace StrategyGame
 
         public override void DoPersonalAction(Army myArmy, Army enemyArmy, StringBuilder sb)
         {
+            if (Health <= 0) return;   // мёртвый — ничего не делает
             if (!TryPerform(sb, "[WeaponBearer]", () =>
             {
                 // Каждый ход уменьшаем ожидание, даже если на передовой
