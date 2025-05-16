@@ -26,21 +26,31 @@ namespace StrategyGame
         {
             if (!TryPerform(sb, "[WeaponBearer]", () =>
             {
+                // Каждый ход уменьшаем ожидание, даже если на передовой
                 counter++;
+
+                var units = myArmy.GetAllUnits();
+                int index = units.IndexOf(this);
+
+                // Если юнит на передовой позиции – сразу атакуем
+                if (index == 0)
+                {
+                    sb.AppendLine("[WeaponBearer] На передовой — атакует!");
+                    base.Attack(myArmy, enemyArmy);
+                    return;
+                }
+
+                // Проверяем готовность к баффу по таймеру
                 if (counter < cooldown)
                 {
                     sb.AppendLine("[WeaponBearer] Отдыхает...");
                     return;
                 }
 
+                // Сброс таймера и поиск союзников для баффа
                 counter = 0;
-
-                var units = myArmy.GetAllUnits();
-                int index = units.IndexOf(this);
-
                 var targets = new List<Unit>();
 
-                // Ищем соседей, которые поддерживают интерфейс IsBuffable
                 if (index > 0 && IsBuffableUnit(units[index - 1]))
                     targets.Add(units[index - 1]);
 
@@ -56,16 +66,15 @@ namespace StrategyGame
                 var random = new Random();
                 var target = targets[random.Next(targets.Count)];
 
-                // Готовим список баффов, проверяем через IsBuffable
                 var buffs = new List<Func<Unit, Unit>>
-            {
-                u => HasDecorator<HelmetDecorator>(u) ? u : new HelmetDecorator(u),
-                u => HasDecorator<ShieldDecorator>(u) ? u : new ShieldDecorator(u),
-                u => HasDecorator<PotionDecorator>(u) ? u : new PotionDecorator(u),
-                u => HasDecorator<SharpnessDecorator>(u) ? u : new SharpnessDecorator(u),
-            };
+                {
+                    u => HasDecorator<HelmetDecorator>(u)    ? u : new HelmetDecorator(u),
+                    u => HasDecorator<ShieldDecorator>(u)    ? u : new ShieldDecorator(u),
+                    u => HasDecorator<PotionDecorator>(u)    ? u : new PotionDecorator(u),
+                    u => HasDecorator<SharpnessDecorator>(u)? u : new SharpnessDecorator(u),
+                };
 
-                buffs.RemoveAll(f => f(target) == target); // убираем уже имеющиеся баффы
+                buffs.RemoveAll(f => f(target) == target);
 
                 if (buffs.Count == 0)
                 {
@@ -74,10 +83,8 @@ namespace StrategyGame
                 }
 
                 var applyBuff = buffs[random.Next(buffs.Count)];
-
                 int targetIndex = myArmy.GetAllUnits().IndexOf(target);
                 var newTarget = applyBuff(target);
-
                 myArmy.GetAllUnits()[targetIndex] = newTarget;
 
                 sb.AppendLine($"[WeaponBearer] Баффует {target.DisplayName} новым баффом: {newTarget.GetType().Name}!");
@@ -87,39 +94,27 @@ namespace StrategyGame
             }
         }
 
-        /// <summary>
-        /// Проверяет, реализует ли юнит интерфейс IsBuffable
-        /// </summary>
         private bool IsBuffableUnit(Unit unit)
         {
             while (unit is UnitDecorator decorator)
-            {
                 unit = decorator.unit;
-            }
-
             return unit is IsBuffable;
         }
 
-        /// <summary>
-        /// Проверяет, есть ли у юнита конкретный декоратор
-        /// </summary>
         private bool HasDecorator<T>(Unit unit) where T : Unit
         {
             while (unit is UnitDecorator decorator)
             {
                 if (decorator is T)
                     return true;
-
                 unit = decorator.unit;
             }
-
             return false;
         }
 
         public override void Attack(Army myArmy, Army enemyArmy)
         {
-            // WeaponBearer не атакует напрямую
+            base.Attack(myArmy, enemyArmy);
         }
-
     }
 }

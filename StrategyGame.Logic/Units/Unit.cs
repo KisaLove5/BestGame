@@ -39,7 +39,7 @@ namespace StrategyGame
         private readonly Random _rnd = new();
 
         // --------------- Базовые штуки игрового движка (шанс на успех/промах) ----------------
-        private const double ChanceDecay = 0.93; // после успеха
+        private const double ChanceDecay = 0.7; // после успеха
         private const double ChanceReset = 1.00;  // после провала
         private double _currentChance = 1.00;
 

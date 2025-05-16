@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("BestGameUI")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+abe2097587889c8b2c27d7d1aed794d3cd42784b")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+66b9212908e32ca501408399d05b82256e74b495")]
 [assembly: System.Reflection.AssemblyProductAttribute("BestGameUI")]
 [assembly: System.Reflection.AssemblyTitleAttribute("BestGameUI")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
